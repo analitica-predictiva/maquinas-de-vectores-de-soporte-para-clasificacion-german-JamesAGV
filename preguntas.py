@@ -207,7 +207,13 @@ def pregunta_03():
     # Importe SVC
     # Importe OneHotEncoder
     # Importe Pipeline
-    from ____ import ____
+    #from ____ import ____
+    from sklearn.compose import ColumnTransformer
+    from sklearn.compose import make_column_transformer
+    from sklearn.compose import make_column_selector
+    from sklearn.svm import SVC
+    from sklearn.preprocessing import OneHotEncoder
+    from sklearn.pipeline import Pipeline    
 
     # Cargue las variables.
     X_train, _, y_train, _ = pregunta_02()
@@ -215,24 +221,45 @@ def pregunta_03():
     # Cree un objeto ColumnTransformer que aplique OneHotEncoder a las columnas
     # tipo texto. Use make_column_selector para seleccionar las columnas. Las
     # columnas numéricas no deben ser transformadas.
-    columnTransformer = make_column_transformer(
+    """columnTransformer = make_column_transformer(
         (
             ____(),
             ____(____=____),
         ),
         remainder=____,
+    )"""
+     
+    columnTransformer = make_column_transformer(
+        (
+            OneHotEncoder(),
+            make_column_selector(dtype_include=object)
+        ),
+        remainder='passthrough'
     )
 
     # Cree un pipeline que contenga el columnTransformer y el modelo SVC.
-    pipeline = ____(
+    """pipeline = ____(
         steps=[
             ("____", ____),
             ("____", ____),
         ],
+    )"""
+
+    pipeline = Pipeline(
+        steps=[
+            (
+                'columnTransformer',
+                columnTransformer
+            ),
+            (
+                'svc',
+                SVC()
+            )
+        ]
     )
 
     # Entrene el pipeline con los datos de entrenamiento.
-    ____.____(____, ____)
+    pipeline.fit(X_train, y_train)
 
     # # Retorne el pipeline entrenado
     return pipeline
